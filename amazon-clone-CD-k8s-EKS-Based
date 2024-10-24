@@ -54,22 +54,22 @@ pipeline{
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){
                        sh "docker build -t amazon ."
-                       sh "docker tag amazon acecloudacademy/amazon:latest "
-                       sh "docker push acecloudacademy/amazon:latest "
+                       sh "docker tag amazon manjunathashastri/amazon:latest "
+                       sh "docker push manjunathashastri/amazon:latest "
                     }
                 }
             }
         }
         stage("TRIVY"){
             steps{
-                sh "trivy image acecloudacademy/amazon:latest > trivyimage.txt"
+                sh "trivy image manjunathashastri/amazon:latest > trivyimage.txt"
             }
         }
         stage("deploy_docker"){
             steps{
                 sh "docker stop amazon || true"  // Stop the container if it's running, ignore errors
                 sh "docker rm amazon || true" 
-                sh "docker run -d --name amazon -p 4000:3000 acecloudacademy/amazon:latest"
+                sh "docker run -d --name amazon -p 4000:3000 manjunathashastri/amazon:latest"
             }
         }
         stage('Deploy to Kubernetes') {
